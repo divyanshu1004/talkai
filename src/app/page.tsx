@@ -6,6 +6,19 @@ import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { auth } from "@/lib/auth";
 
+/**
+ * Client-side React component that provides signup, login, and sign-out UI using `authClient`.
+ *
+ * Renders either a "Logged in" view with a sign-out button when a session exists, or a combined
+ * sign-up and sign-in form when no session is present. Uses local state for `name`, `email`,
+ * and `password`. `onSubmit` calls `authClient.signUp.email({ email, name, password })` and
+ * `onLogin` calls `authClient.signIn.email({ email, password })`. Both handlers show a browser
+ * alert on success or error. The sign-out button calls `authClient.signOut()`.
+ *
+ * Note: the signup and login forms share the same `email` and `password` state.
+ *
+ * @returns A React element for the authentication UI.
+ */
 export default function Home() {
   const { data: session } = authClient.useSession();
   const [name, setName] = useState("");
