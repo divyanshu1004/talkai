@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { OctagonAlertIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
+import {FaGithub, FaGoogle} from 'react-icons/fa'
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 import { Input } from "@/components/ui/input";
@@ -20,14 +20,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useState } from "react";
+import { auth } from "@/lib/auth";
 
 const formSchema = z.object({
   email: z.string().email(""),
   password: z.string().min(1, { message: "Password is required" }),
 });
 export const SignInView = () => {
+  const router = useRouter();
   const [pending, setPending] = useState(false);
-  const router= useRouter();
   const [error, setError] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -37,26 +38,48 @@ export const SignInView = () => {
       password: "",
     },
   });
-const onSubmit = (data: z.infer<typeof formSchema>) => {
-        setError(null);
-        setPending(true);
-        authClient.signIn.email({
-            email: data.email,
-            password: data.password,
-        },
-        {
-            onSuccess: () => {
-                setPending(false);
-                router.push("/");
-            },
-            onError: ({error}) => {
-                setError(error.message);
-                setPending(false);
-            }
-        }
-    );
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
+    setError(null);
+    setPending(true);
+    authClient.signIn.email(
+      {
+        email: data.email,
+        password: data.password,
+        callbackURL: "/",
+      },
+      {
+        onSuccess: () => {
+          router.push("/");
+          setPending(false);
 
-    };
+        },
+        onError: ({ error }) => {
+          setError(error.message);
+          setPending(false);
+        },
+      }
+    );
+  };
+
+    const onSocial = (provider: "google" | "github") => {
+    setError(null);
+    setPending(true); 
+    authClient.signIn.social(
+      {
+        provider: provider,
+        callbackURL: "/",
+      },
+      {
+        onSuccess: () => {
+          setPending(false);
+        },
+        onError: ({ error }) => {
+          setError(error.message);
+          setPending(false);
+        },
+      }
+    );
+  };
   return (
     <div className="flex flex-col gap-6">
       <Card className="overflow-hidden p-0">
@@ -108,7 +131,7 @@ const onSubmit = (data: z.infer<typeof formSchema>) => {
                     )}
                   />
                 </div>
-                { !!error && (
+                {!!error && (
                   <Alert className="bg-destructive/10 border-none">
                     <OctagonAlertIcon className="h-4 w-4 !text-destructive" />
                     <AlertTitle>{error}</AlertTitle>
@@ -123,11 +146,23 @@ const onSubmit = (data: z.infer<typeof formSchema>) => {
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <Button disabled={pending} variant="outline" type="button" className="w-full">
-                    Google
+                  <Button
+                    onClick={() => onSocial("google")}
+                    disabled={pending}
+                    variant="outline"
+                    type="button"
+                    className="w-full"
+                  >
+                    <FaGoogle /> Google
                   </Button>
-                  <Button disabled={pending} variant="outline" type="button" className="w-full">
-                    GitHub
+                  <Button
+                    disabled={pending}
+                    onClick={() => onSocial("github")}
+                    variant="outline"
+                    type="button"
+                    className="w-full"
+                  >
+                    <FaGithub /> GitHub
                   </Button>
                 </div>
                 <div className="text-center text-sm">
@@ -150,7 +185,8 @@ const onSubmit = (data: z.infer<typeof formSchema>) => {
         </CardContent>
       </Card>
       <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline-offseet-4">
-                By clicking continue, you agree to our <a href ="#">Terms of Service</a> and <a href ="#">Privacy Policy</a>.
+        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
+        and <a href="#">Privacy Policy</a>.
       </div>
     </div>
   );

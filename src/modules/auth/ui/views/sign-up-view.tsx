@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { OctagonAlertIcon } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import {FaGithub, FaGoogle} from 'react-icons/fa'
 
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
@@ -21,20 +22,21 @@ import {
 } from "@/components/ui/form";
 import { useState } from "react";
 
-const formSchema = z.object({
-  name: z.string().min(1, { message: "Name is required" }),
-  email: z.string().email(""),
-  password: z.string().min(1, { message: "Password is required" }),
+const formSchema = z
+  .object({
+    name: z.string().min(1, { message: "Name is required" }),
+    email: z.string().email(""),
+    password: z.string().min(1, { message: "Password is required" }),
     confirmPassword: z.string().min(1, { message: "Password is required" }),
-})
-.refine((data) => data.password === data.confirmPassword, {
+  })
+  .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
-});
+  });
 
 export const SignUpView = () => {
+  const router = useRouter();
   const [pending, setPending] = useState(false);
-  const router= useRouter();
   const [error, setError] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -46,27 +48,48 @@ export const SignUpView = () => {
       confirmPassword: "",
     },
   });
-const onSubmit = (data: z.infer<typeof formSchema>) => {
-        setError(null);
-        setPending(true);
-        authClient.signUp.email({
-            name: data.name,
-            email: data.email,
-            password: data.password,
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
+    setError(null);
+    setPending(true);
+    authClient.signUp.email(
+      {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        callbackURL: "/",
+      },
+      {
+        onSuccess: () => {
+          router.push("/");
+          setPending(false);
         },
-        {
-            onSuccess: () => {
-                setPending(false);
-                router.push("/");
-            },
-            onError: ({error}) => {
-                setError(error.message);
-                setPending(false);
-            }
-        }
+        onError: ({ error }) => {
+          setError(error.message);
+          setPending(false);
+        },
+      }
     );
+  };
 
-    };
+  const onSocial = (provider: "google" | "github") => {
+    setError(null);
+    setPending(true); 
+    authClient.signIn.social(
+      {
+        provider: provider,
+        callbackURL: "/",
+      },
+      {
+        onSuccess: () => {
+          setPending(false);
+        },
+        onError: ({ error }) => {
+          setError(error.message);
+          setPending(false);
+        },
+      }
+    );
+  };
   return (
     <div className="flex flex-col gap-6">
       <Card className="overflow-hidden p-0">
@@ -75,9 +98,7 @@ const onSubmit = (data: z.infer<typeof formSchema>) => {
             <form onSubmit={form.handleSubmit(onSubmit)} className="p-6 md:p-8">
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col items-center text-center">
-                  <h1 className="text-2xl font-bold">
-                    Let&apos;s get started
-                  </h1>
+                  <h1 className="text-2xl font-bold">Let&apos;s get started</h1>
                   <p className="text-muted-foregroundtext-balance">
                     Create your account
                   </p>
@@ -158,7 +179,7 @@ const onSubmit = (data: z.infer<typeof formSchema>) => {
                     )}
                   />
                 </div>
-                { !!error && (
+                {!!error && (
                   <Alert className="bg-destructive/10 border-none">
                     <OctagonAlertIcon className="h-4 w-4 !text-destructive" />
                     <AlertTitle>{error}</AlertTitle>
@@ -173,11 +194,23 @@ const onSubmit = (data: z.infer<typeof formSchema>) => {
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
-                  <Button disabled={pending} variant="outline" type="button" className="w-full">
-                    Google
+                  <Button
+                    onClick={() => onSocial("google")}
+                    disabled={pending}
+                    variant="outline"
+                    type="button"
+                    className="w-full"
+                  >
+                    <FaGoogle /> Google
                   </Button>
-                  <Button disabled={pending} variant="outline" type="button" className="w-full">
-                    GitHub
+                  <Button
+                    onClick={() => onSocial("github")}
+                    disabled={pending}
+                    variant="outline"
+                    type="button"
+                    className="w-full"
+                  >
+                    <FaGithub /> GitHub
                   </Button>
                 </div>
                 <div className="text-center text-sm">
@@ -200,7 +233,8 @@ const onSubmit = (data: z.infer<typeof formSchema>) => {
         </CardContent>
       </Card>
       <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline-offseet-4">
-                By clicking continue, you agree to our <a href ="#">Terms of Service</a> and <a href ="#">Privacy Policy</a>.
+        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
+        and <a href="#">Privacy Policy</a>.
       </div>
     </div>
   );
