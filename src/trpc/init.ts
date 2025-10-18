@@ -1,4 +1,6 @@
-import { initTRPC } from '@trpc/server';
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
+import { initTRPC, TRPCError } from '@trpc/server';
 import { cache } from 'react';
 export const createTRPCContext = cache(async () => {
   /**
@@ -6,6 +8,7 @@ export const createTRPCContext = cache(async () => {
    */
   return { userId: 'user_123' };
 });
+
 // Avoid exporting the entire t-object
 // since it's not very descriptive.
 // For instance, the use of a t variable
@@ -20,3 +23,12 @@ const t = initTRPC.create({
 export const createTRPCRouter = t.router;
 export const createCallerFactory = t.createCallerFactory;
 export const baseProcedure = t.procedure;           
+export const protectProcedure = baseProcedure.use(async ({ ctx, next }) => {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+    });
+    if (!session) {
+        throw new TRPCError({ code: "UNAUTHORIZED",message :"Unauthorized"});
+    }
+    return next({ctx: {...ctx,auth: session } });
+  });
