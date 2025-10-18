@@ -16,6 +16,7 @@ export const NewAgentDialog = ({
             open={open}
             onOpenChange={onOpenChange}
         >
+          
             <AgentForm 
                 onSuccess ={() => onOpenChange(false)}
                 onCancel ={() => onOpenChange(false)}

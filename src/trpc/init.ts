@@ -23,12 +23,12 @@ const t = initTRPC.create({
 export const createTRPCRouter = t.router;
 export const createCallerFactory = t.createCallerFactory;
 export const baseProcedure = t.procedure;           
-export const protectProcedure = baseProcedure.use(async ({ ctx, next }) => {
+export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
   const session = await auth.api.getSession({
     headers: await headers(),
-    });
-    if (!session) {
-        throw new TRPCError({ code: "UNAUTHORIZED",message :"Unauthorized"});
+  });
+  if (!session) {
+    throw new TRPCError({ code: "UNAUTHORIZED", message: "Unauthorized" });
     }
     return next({ctx: {...ctx,auth: session } });
   });
