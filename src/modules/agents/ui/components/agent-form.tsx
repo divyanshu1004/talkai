@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { agentsInsertSchema } from "../../schema";
+import { toast } from "sonner";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {Form,FormControl,FormField,FormItem,FormLabel,FormMessage} from "@/components/ui/form";
@@ -11,7 +12,7 @@ import{GeneratedAvatar} from "@/components/generated-avatar"
 import {Textarea} from "@/components/ui/textarea";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
-import { Toaster } from "@/components/ui/sonner";
+
 
 interface AgentFormprops {
   onSuccess?: () => void;
@@ -28,7 +29,7 @@ export const AgentForm = ({
   const router = useRouter();
   const queryClient = useQueryClient();
   const createAgent = useMutation(
-    trpc.agents.create.mutationsOptions({
+    trpc.agents.create.mutationOptions({
       onSuccess: ()=> {
         queryClient.invalidateQueries(
           trpc.agents.getMany.queryOptions(),
@@ -41,7 +42,7 @@ export const AgentForm = ({
         onSuccess?.();
       },
       onError: (error) => {
-        Toaster.error(error.message);
+        toast.error(error.message);
         //ToDO check if error code is "Forbidden",redirect to /upgrade
       },
     }),
@@ -54,7 +55,7 @@ export const AgentForm = ({
     },
   });
   const isEdit = !!initialValues?.id;
-  const isPendhing = createAgent.isPending;
+  const isPending = createAgent.isPending;
 
   const onSubmit = (values: z.infer<typeof agentsInsertSchema>) => {
     if (isEdit) {

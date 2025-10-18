@@ -1,5 +1,5 @@
 import { agents } from "@/db/schema";
-import { createTRPCRouter,protectedProcedure } from "@/trpc/init";
+import { baseProcedure, createTRPCRouter,protectedProcedure } from "@/trpc/init";
 import {db} from "@/db";
 import { agentsInsertSchema } from "../schema";
 import { eq } from "drizzle-orm";
