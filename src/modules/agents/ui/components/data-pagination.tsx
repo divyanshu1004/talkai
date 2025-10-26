@@ -1,9 +1,9 @@
 import {Button} from "@/components/ui/button";
 
 interface Props {
-    page:number;
-    totalPages:number;
-    onPageChange: (page:number) => void;
+    page: number;
+    totalPages: number;
+    onPageChange: (page: number) => void;
 };
 
 
