@@ -145,13 +145,13 @@ export const MeetingForm = ({
                 </FormControl>
                 <FormDescription>
                   Not Found what you&apos;re looking for?{" "}
-                  <Button
+                  <button
                     type="button"
-                    className="text-primary hover:underline"
+                    className=" text-primary hover:underline"
                     onClick={() => setOpenNewAgentDialog(true)}
                   >
                     Create New Agent
-                  </Button>
+                  </button>
 
                 </FormDescription>
                 <FormMessage />
@@ -171,7 +171,7 @@ export const MeetingForm = ({
                 </Button>
             )}
             <Button disabled ={isPending} type="submit">
-              {isEdit ? "Update Agent" : "Create Agent"}
+              {isEdit ? "Update Meeting" : "Create Meeting"}
             </Button>
           </div>
         </form>

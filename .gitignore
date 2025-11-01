@@ -39,3 +39,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# main code
+/src/app/(auth)
+/src/app/(dashboard)
+/src/app/api
+/src/hooks
+/src/lib
+/src/modules
+/src/trpc
+
