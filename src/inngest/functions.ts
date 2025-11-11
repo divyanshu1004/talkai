@@ -29,7 +29,9 @@ Example:
 #### Next Section
 - Feature X automatically does Y
 - Mention of integration with Z`.trim(),
-    model: openai({model: "gpt-4o", apiKey: process.env.OPENAI_API_KEY}),
+
+    model: openai({model: "gpt-3.5-turbo", apiKey: process.env.OPENAI_API_KEY}),
+
 })
 
 
