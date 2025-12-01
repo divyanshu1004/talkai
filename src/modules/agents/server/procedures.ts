@@ -1,6 +1,6 @@
 import z from "zod";
 import {db} from "@/db";
-import { agents } from "@/db/schema";
+import { agents, meetings } from "@/db/schema";
 import { agentsInsertSchema, agentsUpdateSchema } from "../schema";
 import { and, count, desc, eq, getTableColumns, ilike, sql } from "drizzle-orm";
 import { createTRPCRouter,premiumProcedure,protectedProcedure } from "@/trpc/init";
@@ -52,17 +52,14 @@ export const agentsRouter = createTRPCRouter({
         message: "Agent not found",
       });
     }
-
     return removedAgent;
-
   }),
 
   getOne: protectedProcedure.input(z.object({ id: z.string() })).query(async({input})=>{
     const [existingAgent] = await db
     .select({
       ...getTableColumns(agents),
-      //TODO change to actual meeting count
-      meetingCount: sql<number>`5`,
+      meetingCount: db.$count(meetings, eq(agents.id, meetings.agentId)),
     })
     .from(agents)
     .where(eq(agents.id, input.id))
@@ -87,8 +84,7 @@ export const agentsRouter = createTRPCRouter({
       const data = await db
       .select({
         ...getTableColumns(agents),
-        //TODO change to actual meeting count
-        meetingCount: sql<number>`7`,
+        meetingCount: db.$count(meetings, eq(agents.id, meetings.agentId)),
       })
       .from(agents)
       .where(
