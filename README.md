@@ -1,36 +1,28 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# TalkAI — Your chatty, slightly weird AI sidekick 🤖🎉
 
-First, run the development server:
+Welcome to TalkAI — a tiny, opinionated playground for building conversational UIs that feel less robotic and more like your favourite barista who also happens to know a lot about history. It's minimal, remixable, and ready for developers who want to prototype chat experiences quickly.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+What it does
+- Spins up a developer-first chat playground so you can send prompts and get replies.
+- Wires a frontend to an AI backend so messages flow like sweet, caffeinated conversation.
+- Includes examples for sending prompts, handling replies, and iterating fast on UX for conversations.
+
+What it's made with (the techy tasty bits)
+- JavaScript / TypeScript — glue code & brain surgery
+- Node.js — backend server energy
+- Frontend: React + Vite (or swap in your fav framework) — snappy UI vibes
+- Styling: TailwindCSS or plain CSS — choose your warp and weft
+- OpenAI API — the language-model magic engine
+- Real-time: WebSockets or HTTP (your call) for interactive feels
+
+
+Important note about the OpenAI API key
+- Heads up! The OpenAI API key currently does not have tokens — meaning requests will fail until the key has available tokens/quota. If you try to generate responses right now, they'll error out. Please top up the account or use a key with available quota before running the app.
+
+License
+- MIT. Do cool stuff. Be kind.
+
+Have fun — and may your prompts be ever creative! 🚀
+TalkAI — chatty by design, delightful by accident.
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
