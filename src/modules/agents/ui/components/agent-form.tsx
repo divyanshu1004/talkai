@@ -35,12 +35,17 @@ export const AgentForm = ({
         await queryClient.invalidateQueries(
           trpc.agents.getMany.queryOptions({}),
         );
-        //TODO: Invalidate free tier usage
-        onSuccess?.();
+        await queryClient.invalidateQueries(
+          trpc.premium.getFreeUsage.queryOptions(),
+        );
+
+        onSuccess?.();        
       },
       onError: (error) => {
         toast.error(error.message);
-        //ToDO check if error code is "Forbidden",redirect to /upgrade
+        if( error.data?.code === "FORBIDDEN"){
+          router.push("/upgrade");
+        }
       },
     }),
   );
@@ -60,7 +65,6 @@ export const AgentForm = ({
       },
       onError: (error) => {
         toast.error(error.message);
-        //ToDO check if error code is "Forbidden",redirect to /upgrade
       },
     }),
   );

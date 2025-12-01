@@ -15,6 +15,7 @@ import { CommandSelect } from "@/components/command-select";
 import { GeneratedAvatar } from "@/components/generated-avatar";
 import { id } from "date-fns/locale";
 import { NewAgentDialog } from "@/modules/agents/ui/components/new-agent-dialog";
+import { useRouter } from "next/navigation";
 
 
 interface MeetingFormprops {
@@ -29,7 +30,7 @@ export const MeetingForm = ({
   initialValues,
 }: MeetingFormprops) => {
   const trpc = useTRPC();
-
+  const router = useRouter();
   const queryClient = useQueryClient();
   const [openNewAgentDialog, setOpenNewAgentDialog] = useState(false);
  const [agentSearch, setAgentSearch] = useState("");
@@ -47,12 +48,17 @@ export const MeetingForm = ({
         await queryClient.invalidateQueries(
           trpc.meetings.getMany.queryOptions({}),
         );
-        //TODO: Invalidate free tier usage
+        await queryClient.invalidateQueries(
+          trpc.premium.getFreeUsage.queryOptions(),
+        );
+
         onSuccess?.(data.id);
       },
       onError: (error) => {
         toast.error(error.message);
-        //ToDO check if error code is "Forbidden",redirect to /upgrade
+        if( error.data?.code === "FORBIDDEN"){
+          router.push("/upgrade");
+        }
       },
     }),
   );
@@ -138,7 +144,7 @@ export const MeetingForm = ({
                     }))}
                     onSelect={field.onChange}
                     onSearch ={setAgentSearch}
-                    value={field.value}
+                    value={field.value ?? ""}
                     placeholder="Select an agent"
                   />
 
