@@ -2,6 +2,11 @@ import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { initTRPC, TRPCError } from '@trpc/server';
 import { cache } from 'react';
+import { polarClient } from '@/lib/polar';
+import { db } from '@/db';
+import { count, eq } from 'drizzle-orm';
+import { agents, meetings } from '@/db/schema';
+import { MAX_FREE_AGENTS, MAX_FREE_MEETINGS } from '@/modules/premium/constants';
 export const createTRPCContext = cache(async () => {
   /**
    * @see: https://trpc.io/docs/server/context
@@ -31,4 +36,42 @@ export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
     throw new TRPCError({ code: "UNAUTHORIZED", message: "Unauthorized" });
     }
     return next({ctx: {...ctx,auth: session } });
+  });
+  export const premiumProcedure = (entity: "meetings" | "agents") => protectedProcedure.use(async ({ctx,next}) => {
+    const customer = await polarClient.customers.getStateExternal({
+      externalId: ctx.auth.user.id,
+    });
+
+    const [userMeetings] = await db
+        .select({
+        count: count(meetings.id),
+        })
+        .from(meetings)
+        .where(eq(meetings.userId, ctx.auth.user.id));
+    const [userAgents] = await db
+        .select({
+        count: count(agents.id),
+        })
+        .from(agents)
+        .where(eq(agents.userId, ctx.auth.user.id));
+    const isPremium = customer.activeSubscriptions.length > 0;
+    const isFreeAgentLimitReached = userAgents.count >= MAX_FREE_AGENTS;
+    const isFreeMeetingLimitReached = userMeetings.count >= MAX_FREE_MEETINGS;
+    
+    const shouldthrowMeetingsError = entity === "meetings" && !isPremium && isFreeMeetingLimitReached;
+    const shouldthrowAgentsError = entity === "agents" && !isPremium && isFreeAgentLimitReached;
+
+    if (shouldthrowMeetingsError) {
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: "You have reached the limit of free meetings. Please upgrade to premium to create more meetings.",
+      });
+    }
+    if (shouldthrowAgentsError) {
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: "You have reached the limit of free agents. Please upgrade to premium to create more agents.",
+      });
+    }
+    return next({ ctx :{...ctx, customer}});
   });
