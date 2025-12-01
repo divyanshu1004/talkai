@@ -20,7 +20,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useState } from "react";
-import { auth } from "@/lib/auth";
 
 const formSchema = z.object({
   email: z.string().email(""),

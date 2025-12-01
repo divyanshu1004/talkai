@@ -1,5 +1,4 @@
 "use client"
-
 import { Separator } from "@/components/ui/separator";
 import {
     Sidebar,
@@ -15,11 +14,8 @@ import {
 import { cn } from "@/lib/utils";
 import { BotIcon, StarIcon, VideoIcon } from "lucide-react";
 import { usePathname } from "next/navigation";
-
 import Image from "next/image";
 import Link from "next/link";
-import { use } from "react";
-import path from "path";
 import { DashboardUserButton } from "./dashboard-user-button";
 import { DashboardTrial } from "./dashboard-trial";
 const firstSection = [

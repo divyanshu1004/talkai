@@ -275,7 +275,6 @@ export const meetingsRouter = createTRPCRouter({
             MeetingStatus.Active,
             MeetingStatus.Completed,
             MeetingStatus.Processing,
-            MeetingStatus.Canceled,
             MeetingStatus.Cancelled,
           ])
           .nullish(),
