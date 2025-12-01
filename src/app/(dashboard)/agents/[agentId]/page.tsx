@@ -3,7 +3,6 @@ import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { AgentIdView, AgentIdViewError, AgentIdViewLoading } from "@/modules/agents/ui/views/agent-id-view";
-import { Agent } from "http";
 
 interface Props {
     params: Promise<{ agentId: string}>

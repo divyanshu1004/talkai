@@ -2,7 +2,7 @@ import z from "zod";
 import {db} from "@/db";
 import { agents, meetings } from "@/db/schema";
 import { agentsInsertSchema, agentsUpdateSchema } from "../schema";
-import { and, count, desc, eq, getTableColumns, ilike, sql } from "drizzle-orm";
+import { and, count, desc, eq, getTableColumns, ilike } from "drizzle-orm";
 import { createTRPCRouter,premiumProcedure,protectedProcedure } from "@/trpc/init";
 import { MIN_PAGE_SIZE, DEFAULT_PAGE_SIZE, MAX_PAGE_SIZE, DEFAULT_PAGE } from "@/constants";
 import { TRPCError } from "@trpc/server";
