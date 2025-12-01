@@ -1,7 +1,7 @@
 
-# TalkAI — Your chatty, slightly weird AI sidekick 🤖🎉
+# [TalkAI — Your chatty, slightly weird AI sidekick](https://talkai-phi.vercel.app) 🤖🎉
 
-Welcome to TalkAI — a tiny, opinionated playground for building conversational UIs that feel less robotic and more like your favourite barista who also happens to know a lot about history. It's minimal, remixable, and ready for developers who want to prototype chat experiences quickly.
+Welcome to [TalkAI](https://talkai-phi.vercel.app) — a tiny, opinionated playground for building conversational UIs that feel less robotic and more like your favourite barista who also happens to know a lot about history. It's minimal, remixable, and ready for developers who want to prototype chat experiences quickly.
 
 What it does
 - Spins up a developer-first chat playground so you can send prompts and get replies.
