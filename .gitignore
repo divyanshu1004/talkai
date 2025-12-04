@@ -41,3 +41,29 @@ yarn-error.log*
 next-env.d.ts
 
 # main code
+/src/modules/meetings/server/procedures.ts
+/src/modules/meetings/server/procedures.js
+/src/modules/premium/server/procedures.ts
+/src/modules/premium/ui/components/pricing-card.tsx
+/src/modules/dashboard/ui/components/dashboard-command.tsx
+/src/modules/dashboard/ui/components/dashboard-navbar.tsx
+/src/modules/dashboard/ui/components/dashboard-sidebar.tsx
+/src/modules/dashboard/ui/components/dashboard-trial.tsx
+/src/modules/dashboard/ui/components/dashboard-user-button.tsx
+/src/modules/home/ui/views/home-view.tsx
+/src/trpc/client.tsx
+/src/trpc/init.ts
+/src/trpc/query-client.ts
+/src/trpc/server.tsx
+/src/constants.ts
+/src/trpc/routers/_app.ts
+/src/modules/agents/ui/components/agent-form.tsx
+/src/modules/agents/ui/components/agent-id-view-header.tsx
+/src/modules/agents/ui/components/agents-list-header.tsx
+/src/modules/agents/ui/components/agents-search-filter.tsx
+/src/modules/agents/ui/components/columns.tsx
+/src/modules/agents/ui/components/data-pagination.tsx
+/src/modules/agents/ui/components/new-agent-dialog.tsx
+/src/modules/agents/ui/components/update-agent-dialog.tsx
+
+src\app\api\webhook\route.ts
